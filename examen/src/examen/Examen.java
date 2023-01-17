@@ -4,9 +4,9 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Scanner;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -27,22 +27,15 @@ public class Examen {
         String encriptada = "";
         String aEncriptar = "";
         String encriptado = "";
-        int id = 0;
-        Scanner entrada= new Scanner (System.in);
-        Examen examen = new Examen();
-        //aEnccriptar = JOptionPane.showInputDialog("Ingresa la cadena a encriptar: ");
-        System.out.println("ingrese el texto a encriptar");
-        aEncriptar = entrada.nextLine();
-        encriptada = examen.Encriptar(aEncriptar);
-        examen.mostrar_todos();
-        System.out.println("ingrese el id de la cadena que quiera desencriptar");
-        id = entrada.nextInt();
-        encriptado = examen.buscar_uno(id);
-        //System.out.println(examen.Desencriptar(encriptado));
-        System.out.println("el dato "+encriptado+" desencriptado es: "+ examen.Desencriptar(encriptado));
+        String id = "";
         
-        //JOptionPane.showMessageDialog(null, encriptada);
-        //JOptionPane.showMessageDialog(null, examen.Desencriptar(encriptada));
+        Examen examen = new Examen();
+        aEncriptar = JOptionPane.showInputDialog("Ingresa la cadena a encriptar: ");
+        encriptada = examen.Encriptar(aEncriptar);
+        id = examen.mostrar_todos();
+        encriptado = examen.buscar_uno(Integer.parseInt(id));
+        JOptionPane.showMessageDialog(null, "el dato "+encriptado+" desencriptado es: "+ examen.Desencriptar(encriptado));
+        
         
     }
 
@@ -116,17 +109,22 @@ public class Examen {
          }
      }
      
-     public void mostrar_todos () throws SQLException{
+     public String mostrar_todos () throws SQLException{
+         String id = "";
          st = db.createStatement();
          rs = st.executeQuery("select * from dato");
-         System.out.print("id");
-         System.out.println(" dato");
-         
+         //System.out.print("id");
+         //System.out.println(" dato");
+          String mensaje = "ingrese el id de la cadena que quiera desencriptar \nid  dato";
              while(rs.next()){
-             System.out.print(rs.getString(1)+"  ");
-             System.out.println(rs.getString(2));
+                 mensaje += "\n"+rs.getString(1)+"  "+rs.getString(2);
+             //System.out.print(rs.getString(1)+"  ");
+             //System.out.println(rs.getString(2));
          }
+         //JOptionPane.showMessageDialog(null, mensaje);
+         id = JOptionPane.showInputDialog(mensaje);
          
+         return id;
          
      }
      
